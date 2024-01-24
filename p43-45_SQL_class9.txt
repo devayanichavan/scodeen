@@ -1,0 +1,151 @@
+--Constraints
+--Constraints are used to maintain the accuracy and integrity of the data.
+--1.Primary Key
+--2.Foreign Key
+--3.NOT NULL key
+--4.Unique Key
+--5.Check Key
+--6.Default key
+
+--1.Primary Key --PK
+--NOT NULL + UNIQUE
+--It will always identifies unique record into column of the table.
+--PK is used in general with numeric values .
+
+Create table student(S_ID int primary key,
+STUDENT_NAME varchar(20),
+LOC varchar(20))
+
+insert into student values (1,'praveen','pune')
+insert into student values (2,'Rohan','mumbai')
+insert into student values (3,'Rohan','mumbai')
+insert into student values (NULL,'veen','pune')
+
+select * from student
+
+sp_help student
+
+alter table alter_Operation Drop constraint PK
+
+sp_help alter_Operation
+
+--CLASS-12
+--Auto Increment
+--It will automatically insert or increment the unique values into table once you define the auto increment.
+
+--It will allow you to specify the range of values by which you want to create a unique values.
+--Syntax : Column_name IDENTITY(start,diff)
+
+create table BankAccount(Account int identity, --11128871,11128872,11128873
+AccName varchar(20),
+Branch varchar(20),
+City varchar(20))
+
+--or
+create table BankAccount1(Account int primary key identity(11128870,1), --11128871,11128872,11128873
+AccName varchar(20),
+Branch varchar(20),
+City varchar(20))
+
+
+insert into BankAccount values ('Shon','KR PURAM','Banglore')
+insert into BankAccount values ('Rohan','SP Road','Pune')
+insert into BankAccount values ('Amit','Katraj','Pune')
+insert into BankAccount values ('Mansi','Miyapur','HYD')
+insert into BankAccount values ('Sagar','Shivaji Nagar','Sangli')
+
+select * from BankAccount
+
+
+--2.Foreign Key (FK)
+--A FK is column or collection of columns in one table that refers to the primary key in another table.
+--NULL value can be allowed in foreign key column.
+
+create table department(DID int primary key identity, Dept varchar(20))
+
+insert into department values('CIVIL')
+insert into department values('Mech')
+insert into department values('IT')
+insert into department values('ECE')
+
+select * from department
+
+create table student (S_ID int primary key identity,S_NAME varchar(20),
+DID int foreign key references department(DID) )
+
+insert into student values ('Praveen',2)
+insert into student values ('amit',2)
+insert into student values ('Ronit',1)
+insert into student values ('Meena',4)
+insert into student values ('shanmuka',3)
+insert into student values ('monika',Null)
+insert into student values ('monika',7)
+
+select * from student
+
+--3.NOT NULL
+--NOT NULL constraint restrict you to insert NULL values into a column.
+--If you define NOT NULL constraint on column then you cant insert the NULL values in it.
+--It will allow duplicates.
+
+create table NOTNULL (NID int , FirstName varchar(20) NOT NULL, AGE int NOT NULL)
+
+insert into NOTNULL values (1,'Amrita',27)
+insert into NOTNULL values (2,'Amrita',27)
+insert into NOTNULL values (3,NULL,27)
+
+select * from NOTNULL
+
+--4.Unique
+--It ensures that all the values in a column should be unique or diffrent value.
+--It will accept one NULL value into the column.
+
+create table UNIQUE_TEST (U_ID int Unique , FirstName varchar(20) NOT NULL unique, AGE int NOT NULL)
+
+insert into UNIQUE_TEST values (1,'Amrita',27)
+insert into UNIQUE_TEST values (2,'Sangita',27)
+insert into UNIQUE_TEST values (NULL,'Arpita',23)
+
+insert into UNIQUE_TEST values (NULL,'mehir',23)
+
+select * from UNIQUE_TEST
+
+
+--CLASS-12
+--5.Check key
+--It ensures that all values in a column statisfies a specific condition.
+--Check constarints is used to restrict the value of a column.
+--It is just like condition checking before inserting the data into column.
+
+Create table CHECK_KEY(
+C_ID int primary key ,
+C_Name varchar(10) NOT NULL UNIQUE,
+C_AGE int check(C_AGE >18))
+
+insert into CHECK_KEY values(1,'Sumit',19)
+--The below statment through an exception while inserting the data
+insert into CHECK_KEY values(2,'Ronit',17)
+--Exception/Error
+--The INSERT statement conflicted with the CHECK constraint "CK__CHECK_KEY__C_AGE__440B1D61". 
+--The conflict occurred in database "Testing18", table "dbo.CHECK_KEY", column 'C_AGE'.
+
+--6.Default constarint
+--Set a default value to column when value is not defined/inserted/specified.
+
+Create table DEFAULT_VALUE(
+D_ID int primary key,
+D_name varchar(10) NOT NULL Unique,
+D_City varchar(10),
+D_AGE int check(D_age >=20),
+D_LOC varchar(20) default 'Balaji Nagar')
+
+select * from DEFAULT_VALUE
+--METHOD-I
+insert into DEFAULT_VALUE values(1,'Smita','Jaipur',20,'katraj')
+insert into DEFAULT_VALUE values(2,'Amla','Chennai',28,default)
+insert into DEFAULT_VALUE values(3,'Asin','Madurai',34,'')
+
+--METHOD-II
+insert into DEFAULT_VALUE (D_ID,D_name,D_City,D_AGE) values(4,'Surya','Banglore',43)
+
+
